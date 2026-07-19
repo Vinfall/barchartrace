@@ -1,17 +1,17 @@
 @font-face {
-  font-family: "Open Sans";
-  src: url("./Open_Sans/OpenSans-Light.ttf");
+    font-family: "Open Sans";
+    src: url("./Open_Sans/OpenSans-Light.ttf");
 }
 
 @font-face {
-  font-family: "Open Sans";
-  src: url("./Open_Sans/OpenSans-SemiBold.ttf");
-  font-weight: bold;
+    font-family: "Open Sans";
+    src: url("./Open_Sans/OpenSans-SemiBold.ttf");
+    font-weight: bold;
 }
 
 body {
-    font-family: "Open Sans",sans-serif;
-    font-size: .9375rem;
+    font-family: "Open Sans", sans-serif;
+    font-size: 0.9375rem;
     font-weight: 300;
     line-height: 1.9;
 }
@@ -25,11 +25,12 @@ body {
 label {
     font-weight: 400;
     font-size: 13px;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
     margin-bottom: 4px;
 }
 
-.btn-outline-primary.disabled, .btn-outline-primary:disabled {
+.btn-outline-primary.disabled,
+.btn-outline-primary:disabled {
     color: #50a1ff;
     background-color: transparent;
 }
@@ -95,14 +96,11 @@ text.label {
     font-weight: 600;
     fill: #202020;
     dominant-baseline: middle;
-
 }
 
 .xAxis .tick:nth-child(2) text {
     text-anchor: start;
 }
-
-
 
 .section {
     background: #f3f4f4;
@@ -120,8 +118,8 @@ text.label {
     display: block;
     width: 100%;
     height: calc(2.53125rem + 2px);
-    padding: .375rem .75rem;
-    font-size: .9375rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.9375rem;
     line-height: 1.9;
     color: #999;
     background-color: #fff;
