@@ -2,20 +2,13 @@
 <html lang="en">
 
 <head>
-    <title>
-        FabDev | Bar chart race generator
-    </title>
+    <meta charset="UTF-8">
     <meta property="og:title" content="Opensource bar chart race generator">
-    <meta property="og:description"
-        content="Generate your own bar chart race from a csv file thanks to this open source tool made by FabDev">
-    <meta property="og:image" content="https://fabdevgit.github.io/barchartrace/css/demo.png">
-    <meta property="og:url" content="https://fabdevgit.github.io/barchartrace/">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta charset="utf-8">
+    <meta property="og:description" content="Generate your own bar chart race from a csv file">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description"
-        content="Generate your own bar chart race from a csv file thanks to this open source tool made by FabDev">
-    <meta name="keywords" content="Opensource bar chart race generator">
+    <title>Bar chart race generator</title>
+    <meta name="description" content="Generate your own bar chart race from a csv file">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha512-oc9+XSs1H243/FRN9Rw62Fn8EtxjEYWHXRvjS43YtueEewbS6ObfXcJNyohjHqVKFPoXXUxwc+q1K7Dee6vv9g=="
@@ -25,348 +18,208 @@
 </head>
 
 <body>
-    <main class="main-content" id="app">
-        <section class="section">
-            <div class="container">
-                <h1 id="main-title" class=" text-center">Bar chart race generator</h1>
-                <div class="card border">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <form @submit="checkForm">
-                                    <div v-if="errors.length">
-                                        <b>Please correct the following error(s):</b>
-                                        <ul>
-                                            <li v-for="error in errors">(( error ))</li>
-                                        </ul>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="customFile">CSV file</label>
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="customFile"
-                                                @change="loadFile"
-                                                accept=".csv, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                                aria-describedby="passwordHelpBlock">
-                                            <small id="passwordHelpBlock" class="form-text text-muted">
-                                                <a href="#myModal" data-toggle="modal">show accepted csv formats</a>
-                                            </small>
-
-                                            <label class="custom-file-label" for="customFile"
-                                                ref="filelabel">((fileplaceholder))</label>
+    <div id="app">
+        <main class="main-content">
+            <section class="section">
+                <div class="container">
+                    <h1 id="main-title" class="text-center">Bar chart race generator</h1>
+                    <div class="card border">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form @submit.prevent="checkForm">
+                                        <div v-if="errors.length" class="alert alert-warning">
+                                            <b>Please correct the following error(s):</b>
+                                            <ul>
+                                                <li v-for="error in errors" :key="error">{{ error }}</li>
+                                            </ul>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="duration">Animation duration (in s)</label>
-                                        <input id="duration" v-model="duration" class="form-control" type="number"
-                                            name="duration" min="0">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="top_n">Number of bars to display</label>
-                                        <input id="top_n" v-model="top_n" class="form-control" type="number"
-                                            name="top_n" min="0">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="title">Title</label>
-                                        <input id="title" v-model="title" class="form-control" type="text" name="title">
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <button type="button" v-if="!csv_data"
-                                            class="btn btn-outline-primary disabled">Generate Bar Chart Race</button>
-                                        <button type="submit" v-if="csv_data" class="btn btn-primary">Generate Bar Chart
-                                            Race</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-lg-6 border-left d-lg-block">
-                                <label for="">Example files</label>
-                                <table class="table table-bordered">
-                                    <tbody>
-                                        <tr>
-                                            <td>StackOverflow questions per language</td>
-                                            <td><a href="#" @click.prevent="loadExample('stackoverflow')">load data</a>
-                                            </td>
-                                            <td><a href="datasets/stackoverflow.csv">Download</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Total cases of COVID-19 per country</td>
-                                            <td><a href="" @click.prevent="loadExample('covid19')">load data</a></td>
-                                            <td><a href="datasets/covid19-data.csv">Download</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>ATP Tennis ranking</td>
-                                            <td><a href="" @click.prevent="loadExample('tennis')">load data</a></td>
-                                            <td><a href="datasets/tennis.csv">Download</a></td>
-                                        <tr>
-                                            <td>CO2 Emissions per country</td>
-                                            <td><a href="" @click.prevent="loadExample('co2')">load data</a></td>
-                                            <td><a href="datasets/co2.csv">Download</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                        <div class="form-group">
+                                            <label for="customFile">CSV file</label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="customFile"
+                                                    @change="loadFile" accept=".csv">
+                                                <label class="custom-file-label" for="customFile" ref="filelabel">
+                                                    {{ fileplaceholder }}
+                                                </label>
+                                            </div>
+                                            <small class="form-text text-muted">
+                                                <a href="#" @click.prevent="showModal = true">show accepted csv
+                                                    formats</a>
+                                            </small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="duration">Animation duration (in s)</label>
+                                            <input id="duration" v-model.number="duration" class="form-control"
+                                                type="number" min="1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="top_n">Number of bars to display</label>
+                                            <input id="top_n" v-model.number="top_n" class="form-control" type="number"
+                                                min="1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="title">Title</label>
+                                            <input id="title" v-model="title" class="form-control" type="text">
+                                        </div>
+                                        <div class="form-group text-center">
+                                            <button type="button" v-if="!csv_data"
+                                                class="btn btn-outline-primary disabled" disabled>
+                                                Generate Bar Chart Race
+                                            </button>
+                                            <button type="submit" v-if="csv_data" class="btn btn-primary">
+                                                Generate Bar Chart Race
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-6 border-left">
+                                    <label>Example files</label>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>StackOverflow questions per language</td>
+                                                <td><a href="#" @click.prevent="loadExample('stackoverflow')">load
+                                                        data</a></td>
+                                                <td><a href="datasets/stackoverflow.csv">Download</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total cases of COVID-19 per country</td>
+                                                <td><a href="#" @click.prevent="loadExample('covid19')">load data</a>
+                                                </td>
+                                                <td><a href="datasets/covid19-data.csv">Download</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>ATP Tennis ranking</td>
+                                                <td><a href="#" @click.prevent="loadExample('tennis')">load data</a>
+                                                </td>
+                                                <td><a href="datasets/tennis.csv">Download</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>CO2 Emissions per country</td>
+                                                <td><a href="#" @click.prevent="loadExample('co2')">load data</a></td>
+                                                <td><a href="datasets/co2.csv">Download</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <hr>
-                <div id="chart-card" class="card">
-                    <div class="card-body position-relative">
-                        <div class="text-right mb-4">
-                            <button type="button" class="btn btn-xs btn-outline-primary"
-                                v-on:click="stopRace">Stop</button>
-                            <button type="button" class="btn btn-xs btn-outline-primary"
-                                v-on:click="checkForm">Restart</button>
+                    <hr>
+                    <div id="chart-card" class="card">
+                        <div class="card-body position-relative">
+                            <div class="text-right mb-4">
+                                <button type="button" class="btn btn-xs btn-outline-primary"
+                                    @click="stopRace">Stop</button>
+                                <button type="button" class="btn btn-xs btn-outline-primary"
+                                    @click="checkForm">Restart</button>
+                            </div>
+                            <h5 class="card-title text-center" id="graph-title">{{ title }}</h5>
+                            <div ref="chartDiv" style="width:100%; height: 650px"></div>
+                            <p v-if="!chartReady"
+                                style="position:absolute;top:50%;left:50%;font-size:1.125rem;transform:translate(-50%,-50%)">
+                                Please upload data first
+                            </p>
                         </div>
-                        <h5 class="card-title" id="graph-title">((title))</h5>
-                        <div id="chartDiv" style="width:100%; height: 650px"></div>
-                        <p style="position:absolute;top:50%;left:50%;font-size:1.125rem;transform: translate(-50%,-50%)"
-                            v-if="interval == null">Please upload data first</p>
+                    </div>
+                </div>
+            </section>
+
+            <div v-if="showModal" class="modal-custom-backdrop" @click.self="showModal = false">
+                <div class="modal-custom-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title">Accepted csv formats</h2>
+                            <button type="button" class="close" @click="showModal = false">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Input should be a csv file. <br> Dates should be <strong>YYYY-MM-DD</strong>.</p>
+                            <p><strong>Option 1 :</strong> one row per date (ordered) and one column per contender</p>
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Name1</th>
+                                        <th>Name2</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2018-01-01</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2018-02-01</td>
+                                        <td>2</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2018-03-01</td>
+                                        <td>4</td>
+                                        <td>7</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p><strong>Option 2 :</strong> one row per contender and per date</p>
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Name</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2018-01-01</td>
+                                        <td>Name1</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2018-01-01</td>
+                                        <td>Name2</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2018-02-01</td>
+                                        <td>Name1</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2018-02-01</td>
+                                        <td>Name2</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2018-03-01</td>
+                                        <td>Name1</td>
+                                        <td>4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2018-03-01</td>
+                                        <td>Name2</td>
+                                        <td>7</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title" id="exampleModalLabel">Accepted csv formats</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Input should be a csv file. <br>
-                            Dates should be <span class="font-weight-bold">YYYY-MM-DD</span>.</p>
-                        <p><span class="font-weight-bold">Option 1 :</span> one row per date (ordered) and one column
-                            per contender</p>
-                        <table class="table">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Name1</th>
-                                    <th>Name2</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>2018-01-01</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>2018-02-01</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                </tr>
-                                <tr>
-                                    <td>2018-03-01</td>
-                                    <td>4</td>
-                                    <td>7</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <p><span class="font-weight-bold">Option 2 :</span> one row per contender and per date</p>
-                        <table class="table">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Name</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>2018-01-01</td>
-                                    <td>Name1</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>2018-01-01</td>
-                                    <td>Name2</td>
-                                    <td>3</td>
-                                </tr>
-                                <tr>
-                                    <td>2018-02-01</td>
-                                    <td>Name1</td>
-                                    <td>2</td>
-                                </tr>
-                                <tr>
-                                    <td>2018-02-01</td>
-                                    <td>Name2</td>
-                                    <td>3</td>
-                                </tr>
-                                <tr>
-                                    <td>2018-03-01</td>
-                                    <td>Name1</td>
-                                    <td>4</td>
-                                </tr>
-                                <tr>
-                                    <td>2018-03-01</td>
-                                    <td>Name2</td>
-                                    <td>7</td>
-                                </tr>
-                            </tbody>
-                        </table>
+        </main>
+    </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- v2 -->
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@4.1.4/papaparse.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@5/dist/d3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.23/lodash.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha512-hCP3piYGSBPqnXypdKxKPSOzBHF75oU8wQ81a6OiGXHFMeKs9/8ChbgYl7pUvwImXJb03N4bs1o1DzmbokeeFw=="
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha512-iceXjjbmB2rwoX93Ka6HAHP+B76IY1z0o3h+N1PeDtRSsyeetU3/0QKJqGyPJcX63zysNehggFwMC/bi7dvMig=="
-        crossorigin="anonymous"></script>
-    <script src="js/barchartrace.js"></script>
-    <script>
-        const app = new Vue({
-            el: '#app',
-            data: {
-                errors: [],
-                file: null,
-                csv_data: null,
-                interval: null,
-                duration: 20,
-                tickDuration: 500,
-                top_n: 10,
-                title: "My bar chart",
-                fileplaceholder: "Choose file"
-            },
-            methods: {
-                loadExample: function (setting_name) {
-                    this.duration = settings[setting_name].duration;
-                    this.top_n = settings[setting_name]['top_n'];
-                    this.title = settings[setting_name].title;
-                    Papa.parse(settings[setting_name].url, {
-                        download: true,
-                        header: true,
-                        skipEmptyLines: true,
-                        complete: (results) => {
-                            if (Object.keys(results.data[0]).length === 3) {
-                                results.data = reshapeData(results.data)
-                            }
-                            this.csv_data = results.data;
-                        }
-                    }
-                    )
-                },
-                loadFile: function (e) {
-                    this.file = e.target.files[0];
-                    this.fileplaceholder = this.file.name;
-                    Papa.parse(this.file, {
-                        header: true,
-                        skipEmptyLines: true,
-                        complete: (results) => {
-                            if (Object.keys(results.data[0]).length === 3) {
-                                results.data = reshapeData(results.data)
-                            }
-                            this.csv_data = results.data;
-                            this.top_n = Math.min(20, Object.keys(this.csv_data[0]).length - 1)
-                        }
-                    });
-
-
-                },
-                stopRace: function () {
-                    if (!this.interval) {
-                        return
-                    } else {
-                        this.interval.stop()
-                    }
-                },
-                checkForm: function (e) {
-                    if (this.interval !== null) {
-                        this.interval.stop()
-                    }
-                    if (!this.csv_data) {
-                        return
-                    }
-                    if (this.tickDuration && this.top_n) {
-                        e.preventDefault();
-                        this.top_n = parseInt(this.top_n);
-                        this.duration = parseInt(this.duration);
-                        this.tickDuration = this.duration / this.csv_data.length * 1000
-                        const chartDiv = document.getElementById("chartDiv");
-                        var data = JSON.parse(JSON.stringify(this.csv_data))
-                        this.interval = createBarChartRace(data, this.top_n, this.tickDuration);
-                    }
-
-                    this.errors = [];
-
-                    if (!this.csv_data) {
-                        this.errors.push('csv file is required');
-                    }
-                    if (!this.tickDuration) {
-                        this.errors.push('Time between frames required.');
-                    }
-                    if (!this.top_n) {
-                        this.errors.push('Number of bars to display required.');
-                    }
-                    e.preventDefault();
-                    window.scrollTo({top: $("#chart-card").offset().top - 10, behavior: 'smooth'});
-                }
-            },
-            delimiters: ["((", "))"]
-
-        });
-
-
-        /*
-        reshapes the data from the second accepted csv format to the other :
-        (one row per contender and per date) => (one row per date (ordered) and one column per contender.)
-        */
-        function reshapeData(data) {
-            // groupby dates (first column)
-            column_names = new Set(data.map(x => x[Object.keys(x)[1]]));
-            const grouped_by_date = _.groupBy(data, (e) => e[Object.keys(e)[0]]);
-            return Object.keys(grouped_by_date).sort().map((k) => {
-                item = {'date': k};
-                column_names.forEach((n) => item[n] = 0);
-                grouped_by_date[k].forEach((e) => item[e[Object.keys(e)[1]]] = e[Object.keys(e)[2]]);
-                return item
-            })
-
-        }
-
-        // settings for the example data
-        const settings = {
-            "covid19": {
-                "duration": 30,
-                "top_n": 10,
-                "title": "Total cases of COVID-19 per country",
-                "url": "https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/covid19-data.csv"
-            },
-            "stackoverflow": {
-                "duration": 30,
-                "top_n": 10,
-                "title": "StackOverflow questions per language",
-                "url": "https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/stackoverflow.csv"
-            },
-            "tennis": {
-                "duration": 150,
-                "top_n": 10,
-                "title": "ATP tennis ranking",
-                "url": "https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/tennis.csv"
-            },
-            "co2": {
-                "duration": 30,
-                "top_n": 10,
-                "title": "CO2 Emissions from Fossil Fuels per capita, between 1950 and 2014 (in metric tons)",
-                "url": "https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/co2.csv"
-            }
-        }
-
-
-    </script>
+    <!-- Vue 3 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <!-- D3 v7 (核心动画引擎) -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- PapaParse 5 (CSV解析) -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js"></script>
+    <script src="js/app.js"></script>
 </body>
 
 </html>
