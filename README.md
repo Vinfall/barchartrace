@@ -1,12 +1,19 @@
 # barchartrace
 
-**Online bar chart race generator** :
-[https://fabdevgit.github.io/barchartrace/](https://fabdevgit.github.io/barchartrace/)
+Local bar chart race generator, forked from [barchartrace][barchartrace], rewritten in Vue 3 + D3 v7 + PapaParse 5.
 
-## Accepted csv formats
+## Usage
 
-input data should be in a csv file.
-Dates should be `YYYY-MM-DD`.
+> [!NOTE]
+> While the CSV files never leaves your browser,
+> this program does need to fetch resources from jsDelivr CDN,
+> so it would not work in a completely offline environment.
+
+Just open [index.html](index.html), load CSV, (optionally configure) and generate.
+
+## CSV Format
+
+Date should be in ISO format, i.e. `YYYY-MM-DD`.
 
 Option 1 : one row per date (ordered) and one column per contender.
 
@@ -29,4 +36,6 @@ Date | Name | Value
 
 ## Screenshot
 
-![screenshot](css/demo.png)
+![screenshot](static/demo.webp)
+
+[barchartrace]: https://github.com/FabDevGit/barchartrace
